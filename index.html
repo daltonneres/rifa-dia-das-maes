@@ -8,16 +8,27 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --rosa-choque: #FF2E8B;
+      --rosa-choque-dark: #E02678;
+      --rosa-claro: #FFC0CB;
+      --rosa-suave: #FFE4EC;
+      --bege-claro: #F5E6DA;
+      --bege-escuro: #E8D5C4;
+      --texto: #555555;
+      --branco: #FFFFFF;
+    }
+
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background-color: #F5E6DA;
-      color: #333;
+      background-color: var(--bege-claro);
+      color: var(--texto);
     }
 
     header {
-      background-color: #FF2E8B;
-      color: white;
+      background-color: var(--rosa-choque);
+      color: var(--branco);
       padding: 20px;
       text-align: center;
     }
@@ -28,7 +39,7 @@
     }
 
     .card {
-      background-color: #fff;
+      background-color: var(--branco);
       border-radius: 15px;
       padding: 20px;
       max-width: 500px;
@@ -37,18 +48,17 @@
     }
 
     .titulo {
-      color: #FF2E8B;
+      color: var(--rosa-choque);
       font-size: 28px;
       margin-bottom: 10px;
     }
 
     .descricao {
-      color: #555;
       margin-bottom: 20px;
     }
 
     .botao {
-      background-color: #FFC0CB;
+      background-color: var(--rosa-claro);
       color: #333;
       border: none;
       padding: 15px 25px;
@@ -59,22 +69,41 @@
     }
 
     .botao:hover {
-      background-color: #FF2E8B;
-      color: white;
+      background-color: var(--rosa-choque);
+      color: var(--branco);
     }
 
     footer {
       margin-top: 50px;
-      background-color: #FF2E8B;
-      color: white;
+      background-color: var(--rosa-choque);
+      color: var(--branco);
       text-align: center;
       padding: 20px;
       font-size: 14px;
     }
 
     footer a {
-      color: #fff;
+      color: var(--branco);
       text-decoration: underline;
+    }
+
+    /* BOTÃO WHATSAPP */
+    .whatsapp {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25D366;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+      transition: 0.3s;
+    }
+
+    .whatsapp:hover {
+      transform: scale(1.05);
     }
   </style>
 </head>
@@ -102,9 +131,18 @@
     Suporte 24h com o desenvolvedor 
     <strong>Dalton Neres</strong> - 
     <a href="https://linkneres.vercel.app/" target="_blank">
-      https://linkneres.vercel.app/
+      linkneres.vercel.app
     </a>
   </footer>
+
+  <!-- BOTÃO WHATSAPP -->
+  <a 
+    class="whatsapp" 
+    href="https://wa.me/5599999999999" 
+    target="_blank"
+  >
+    💬 SUPORTE
+  </a>
 
 </body>
 </html>
