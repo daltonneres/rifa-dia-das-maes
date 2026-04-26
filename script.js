@@ -149,6 +149,12 @@ function mostrarConfirmacao(nome, numeros, total) {
         `).join('')}
       </div>
 
+<p style="margin-top:10px;">
+  📸 <strong>Importante:</strong> tire um print desta tela e guarde seus números como comprovante.<br><br>
+
+  🔐 Como medida de segurança e transparência, a equipe da rifa também mantém um registro interno de todas as informações de compra, garantindo a conferência correta no momento do sorteio.
+</p>
+
       <p>Boa sorte! 🍀</p>
     </div>
   `;
