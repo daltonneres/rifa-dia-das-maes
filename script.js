@@ -20,43 +20,85 @@ setInterval(() => {
 }, 1000);
 
 
+// =========================
 // COMPRA
+// =========================
 let ultimoNumero = 0;
 
+// ABRIR MODAL
 function iniciarCompra() {
-  const valorUnitario = 5;
+  document.getElementById("modal").style.display = "flex";
 
-  const quantidade = parseInt(prompt("Quantos números você deseja comprar?"));
-  
+  // limpar campos
+  document.getElementById("quantidade").value = "";
+  document.getElementById("nome").value = "";
+  document.getElementById("whatsappInput").value = "";
+  document.getElementById("resumo").innerHTML = "";
+}
+
+// FECHAR MODAL
+function fecharModal() {
+  document.getElementById("modal").style.display = "none";
+}
+
+// ATUALIZAR RESUMO EM TEMPO REAL
+function atualizarResumo() {
+  const valorUnitario = 5;
+  const quantidade = parseInt(document.getElementById("quantidade").value);
+  const resumo = document.getElementById("resumo");
+
   if (!quantidade || quantidade <= 0) {
-    alert("Quantidade inválida!");
+    resumo.innerHTML = "";
     return;
   }
 
   const total = quantidade * valorUnitario;
 
-  // RESUMO ANTES DE CONTINUAR
-  const confirmar = confirm(
-    `Resumo da compra:\n\n` +
-    `Quantidade: ${quantidade}\n` +
-    `Valor por número: R$ ${valorUnitario.toFixed(2)}\n` +
-    `Total: R$ ${total.toFixed(2)}\n\n` +
-    `Deseja continuar?`
-  );
+  resumo.innerHTML = `
+    <strong>Resumo:</strong><br>
+    ${quantidade} número(s)<br>
+    Total: <strong style="color:#FF2E8B;">R$ ${total.toFixed(2)}</strong>
+  `;
+}
 
-  if (!confirmar) return;
+// CONFIRMAR COMPRA
+function confirmarCompra() {
+  const valorUnitario = 5;
 
-  const nome = prompt("Digite seu nome:");
+  const quantidade = parseInt(document.getElementById("quantidade").value);
+  const nome = document.getElementById("nome").value;
+  const whatsapp = document.getElementById("whatsappInput").value;
+
+  // valida quantidade
+  if (!quantidade || quantidade <= 0) {
+    alert("Quantidade inválida!");
+    return;
+  }
+
+  // valida nome
   if (!nome) {
     alert("Nome obrigatório!");
     return;
   }
 
-  const whatsapp = prompt("Digite seu WhatsApp:");
+  // valida whatsapp vazio
   if (!whatsapp) {
     alert("WhatsApp obrigatório!");
     return;
   }
+
+  // limpa número (remove tudo que não for número)
+  const whatsappLimpo = whatsapp.replace(/\D/g, "");
+
+  // valida tamanho
+  if (whatsappLimpo.length < 10 || whatsappLimpo.length > 11) {
+    alert("WhatsApp inválido! Digite com DDD (ex: 41999999999)");
+    return;
+  }
+
+  const total = quantidade * valorUnitario;
+
+  fecharModal();
 
   alert(`Processando pagamento de R$ ${total.toFixed(2)}...`);
 
@@ -73,14 +115,16 @@ function iniciarCompra() {
 }
 
 
-// CONFIRMAÇÃO (SEM QUEBRAR A PÁGINA)
+// CONFIRMAÇÃO
 function mostrarConfirmacao(nome, numeros, total) {
   const container = document.querySelector(".container");
 
   container.innerHTML = `
     <div class="card">
       <h2 style="color:#FF2E8B;">✅ Pagamento Aprovado!</h2>
-      <p>Obrigado, <strong>${nome}</strong>! Agradecemos pela sua <strong>compra!</strong></p>
+      
+      <p>Obrigado, <strong>${nome}</strong>!<br>
+      Agradecemos pela sua <strong>compra!</strong></p>
 
       <p><strong>Total pago:</strong> R$ ${total.toFixed(2)}</p>
 

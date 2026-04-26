@@ -3,10 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <title>Rifa Dia das Mães</title>
+
+    <!-- Fonte -->
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
       rel="stylesheet"
     />
+
     <link rel="stylesheet" href="style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
@@ -16,18 +19,43 @@
       <h1>🎁 Rifa Especial Dia das Mães</h1>
     </header>
 
-    <div class="container">
-      <div class="card">
-        <div class="titulo">Concorra a uma linda cesta!</div>
+<div class="container">
+  <div class="card">
+    <div class="titulo">Concorra a uma linda cesta!</div>
 
-        <div class="info">🎁 Prêmio: Cesta especial de Dia das Mães</div>
-        <div class="info">💰 Valor por número: R$ 5,00</div>
+    <div class="info">🎁 Prêmio: Cesta especial de Dia das Mães</div>
+    <div class="info">💰 Valor por número: R$ 5,00</div>
 
-        <div class="contador" id="contador">Carregando contagem...</div>
-
-        <button class="botao" onclick="iniciarCompra()">Comprar Número</button>
-      </div>
+    <div class="info">
+      🎟️ Números ilimitados — você pode comprar quantos quiser!
     </div>
+
+    <div class="info">
+      ⏳ O sorteio será realizado ao final da contagem regressiva,
+      previsto para o dia <strong>10/05/2026</strong>.
+    </div>
+
+    <div class="info">
+      🎥 O sorteio será feito dentro da plataforma interna,
+      com gravação ao vivo para total transparência.
+    </div>
+
+    <div class="info">
+      📲 O ganhador receberá o vídeo diretamente no WhatsApp informado na compra.
+    </div>
+
+    <div class="contador" id="contador">Carregando contagem...</div>
+
+    <button class="botao" onclick="iniciarCompra()">
+      Comprar Número
+    </button>
+    <div class="info" style="color:#FF2E8B; font-weight:600; text-align:center;">
+  ⚠️ Quanto antes comprar, maiores as chances de garantir bons números!
+</div>
+  </div>
+</div>
+
+
 
     <footer>
       🔒 Site 100% SEGURO e protegido <br />
@@ -37,6 +65,7 @@
       </a>
     </footer>
 
+    <!-- BOTÃO WHATSAPP -->
     <a
       class="whatsapp"
       href="https://wa.me/5599999999999?text=Olá,%20preciso%20de%20suporte%20na%20rifa"
@@ -44,6 +73,42 @@
     >
       💬 SUPORTE
     </a>
+
+    <!-- MODAL -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <h2>Comprar números</h2>
+
+        <input
+          type="number"
+          id="quantidade"
+          placeholder="Quantidade de números"
+          oninput="atualizarResumo()"
+        />
+
+        <input
+          type="text"
+          id="nome"
+          placeholder="Seu nome"
+        />
+
+        <input
+          type="text"
+          id="whatsappInput"
+          placeholder="Seu WhatsApp"
+        />
+
+        <p id="resumo"></p>
+
+        <button onclick="confirmarCompra()">
+          Confirmar Compra
+        </button>
+
+        <button onclick="fecharModal()" class="fechar">
+          Cancelar
+        </button>
+      </div>
+    </div>
 
     <script src="script.js" defer></script>
   </body>
