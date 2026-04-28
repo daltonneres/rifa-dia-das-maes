@@ -1,13 +1,15 @@
 // CONTADOR (FORMA SEGURA)
 const contador = document.getElementById("contador");
-const dataSorteio = new Date(2026, 4, 10, 10, 0, 0).getTime();
+
+// 💘 nova data - Dia dos Namorados
+const dataSorteio = new Date(2026, 5, 12, 20, 0, 0).getTime();
 
 setInterval(() => {
   const agora = new Date().getTime();
   const distancia = dataSorteio - agora;
 
   if (distancia < 0) {
-    contador.innerHTML = "⏰ Sorteio encerrado!";
+    contador.innerHTML = "💘 O sorteio já aconteceu!";
     return;
   }
 
@@ -29,7 +31,6 @@ let ultimoNumero = 0;
 function iniciarCompra() {
   document.getElementById("modal").style.display = "flex";
 
-  // limpar campos
   document.getElementById("quantidade").value = "";
   document.getElementById("nome").value = "";
   document.getElementById("whatsappInput").value = "";
@@ -41,7 +42,7 @@ function fecharModal() {
   document.getElementById("modal").style.display = "none";
 }
 
-// ATUALIZAR RESUMO EM TEMPO REAL
+// ATUALIZAR RESUMO
 function atualizarResumo() {
   const valorUnitario = 5;
   const quantidade = parseInt(document.getElementById("quantidade").value);
@@ -57,7 +58,7 @@ function atualizarResumo() {
   resumo.innerHTML = `
     <strong>Resumo:</strong><br>
     ${quantidade} número(s)<br>
-    Total: <strong style="color:#FF2E8B;">R$ ${total.toFixed(2)}</strong>
+    Total: <strong style="color:#E53935;">R$ ${total.toFixed(2)}</strong>
   `;
 }
 
@@ -69,28 +70,23 @@ function confirmarCompra() {
   const nome = document.getElementById("nome").value;
   const whatsapp = document.getElementById("whatsappInput").value;
 
-  // valida quantidade
   if (!quantidade || quantidade <= 0) {
     alert("Quantidade inválida!");
     return;
   }
 
-  // valida nome
   if (!nome) {
     alert("Nome obrigatório!");
     return;
   }
 
-  // valida whatsapp vazio
   if (!whatsapp) {
     alert("WhatsApp obrigatório!");
     return;
   }
 
-  // limpa número (remove tudo que não for número)
   const whatsappLimpo = whatsapp.replace(/\D/g, "");
 
-  // valida tamanho
   if (whatsappLimpo.length < 10 || whatsappLimpo.length > 11) {
     alert("WhatsApp inválido! Digite com DDD (ex: 41999999999)");
     return;
@@ -100,7 +96,7 @@ function confirmarCompra() {
 
   fecharModal();
 
-  alert(`Processando pagamento de R$ ${total.toFixed(2)}...`);
+  alert(`💘 Preparando seu momento especial...\nPagamento de R$ ${total.toFixed(2)}`);
 
   setTimeout(() => {
     const numeros = [];
@@ -121,14 +117,14 @@ function mostrarConfirmacao(nome, numeros, total) {
 
   container.innerHTML = `
     <div class="card">
-      <h2 style="color:#FF2E8B;">✅ Pagamento Aprovado!</h2>
+      <h2 style="color:#E53935;">💖 Compra Confirmada!</h2>
       
       <p>Obrigado, <strong>${nome}</strong>!<br>
-      Agradecemos pela sua <strong>compra!</strong></p>
+      Você acabou de espalhar mais amor participando da nossa rifa 💘</p>
 
-      <p><strong>Total pago:</strong> R$ ${total.toFixed(2)}</p>
+      <p><strong>Total:</strong> R$ ${total.toFixed(2)}</p>
 
-      <p>Seus números:</p>
+      <p>Seus números da sorte:</p>
 
       <div style="
         display:flex;
@@ -150,17 +146,16 @@ function mostrarConfirmacao(nome, numeros, total) {
       </div>
 
       <p style="margin-top:10px;">
-        📸 <strong>Importante:</strong> tire um print desta tela e guarde seus números como comprovante.<br><br>
+        📸 <strong>Guarde este momento:</strong> tire um print e salve seus números.<br><br>
 
-        🔐 Como medida de segurança e transparência, a equipe da rifa também mantém um registro interno de todas as informações de compra, garantindo a conferência correta no momento do sorteio.
+        🔐 Seus dados estão seguros e registrados para garantir um sorteio justo e transparente.
       </p>
 
-      <p>Boa sorte! 🍀</p>
+      <p>Boa sorte e muito amor! 💕</p>
     </div>
   `;
 
-  // 🔁 volta para tela inicial após 4 segundos
   setTimeout(() => {
     location.reload();
-  }, 4000);
+  }, 10000);
 }

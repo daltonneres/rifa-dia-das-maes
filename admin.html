@@ -7,148 +7,159 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #FFF5F5;
+    padding: 20px;
+    margin: 0;
+  }
 
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #f5f5f5;
-      padding: 20px;
-      margin: 0;
-    }
+  h1 {
+    margin-bottom: 20px;
+    color: #E53935;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .card {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 14px;
+  }
+
+  th, td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+  }
+
+  th {
+    background: #E53935;
+    color: white;
+  }
+
+  .pago {
+    color: #2e7d32;
+    font-weight: bold;
+  }
+
+  .pendente {
+    color: #fb8c00;
+    font-weight: bold;
+  }
+
+  canvas {
+    background: white;
+    border-radius: 12px;
+    padding: 10px;
+  }
+
+  .numero {
+    background: #FFC0CB;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  button {
+    transition: 0.3s;
+    background: #E53935;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+    background: #C62828;
+  }
+
+  /* 🎬 OVERLAY SORTEIO */
+  #overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    /* fundo mais elegante */
+    background: linear-gradient(180deg, #1a0000, #000);
+
+    color: white;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 9999;
+    text-align: center;
+    padding: 20px;
+  }
+
+  #numeroAnimado {
+    font-size: 90px;
+    margin: 20px 0;
+    color: #FFC0CB;
+    font-weight: bold;
+  }
+
+  #numeroFinal {
+    font-size: 70px;
+    color: #FFD700;
+    margin: 10px 0;
+  }
+
+  #resultadoFinal {
+    animation: aparecer 0.6s ease;
+  }
+
+  @keyframes aparecer {
+    from {opacity: 0; transform: scale(0.8);}
+    to {opacity: 1; transform: scale(1);}
+  }
+
+  /* 📱 RESPONSIVO */
+  @media (max-width: 600px) {
 
     h1 {
-      margin-bottom: 20px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .card {
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      border-radius: 10px;
-      overflow: hidden;
-      font-size: 14px;
-    }
-
-    th, td {
-      padding: 10px;
-      border-bottom: 1px solid #ddd;
-      text-align: center;
-    }
-
-    th {
-      background: #FF2E8B;
-      color: white;
-    }
-
-    .pago {
-      color: green;
-      font-weight: bold;
-    }
-
-    .pendente {
-      color: orange;
-      font-weight: bold;
-    }
-
-    canvas {
-      background: white;
-      border-radius: 10px;
-      padding: 10px;
-    }
-
-    .numero {
-      background: #FFC0CB;
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-weight: bold;
-    }
-
-    button {
-      transition: 0.3s;
-    }
-
-    button:hover {
-      transform: scale(1.05);
-    }
-
-    /* 🎬 OVERLAY SORTEIO */
-    #overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(180deg, #000, #111);
-      color: white;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      z-index: 9999;
-      text-align: center;
-      padding: 20px;
+      font-size: 20px;
     }
 
     #numeroAnimado {
-      font-size: 90px;
-      margin: 20px 0;
-      color: #FFC0CB;
-      font-weight: bold;
+      font-size: 60px;
     }
 
     #numeroFinal {
-      font-size: 70px;
-      color: #FFD700;
-      margin: 10px 0;
+      font-size: 50px;
     }
 
-    #resultadoFinal {
-      animation: aparecer 0.6s ease;
+    table {
+      font-size: 12px;
     }
 
-    @keyframes aparecer {
-      from {opacity: 0; transform: scale(0.8);}
-      to {opacity: 1; transform: scale(1);}
+    th, td {
+      padding: 6px;
     }
-
-    /* 📱 RESPONSIVO */
-    @media (max-width: 600px) {
-
-      h1 {
-        font-size: 20px;
-      }
-
-      #numeroAnimado {
-        font-size: 60px;
-      }
-
-      #numeroFinal {
-        font-size: 50px;
-      }
-
-      table {
-        font-size: 12px;
-      }
-
-      th, td {
-        padding: 6px;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 
 <body>
