@@ -1,6 +1,16 @@
-import { auth } from "./firebase.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { auth, db } from "./firebase.js";
+
+import {
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+import {
+  collection,
+  getDocs,
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // ==========================
 // 🔐 AUTENTICAÇÃO
@@ -8,116 +18,127 @@ import { signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth
 onAuthStateChanged(auth, (user) => {
   if (!user) {
     window.location.href = "login.html";
-  }
-});
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = "login.html";
   } else {
     atualizarSaudacao(user.email.split("@")[0]);
+    carregarCompras();
   }
 });
 
 // ==========================
-// 📦 DADOS (SIMULAÇÃO)
+// 📊 VARIÁVEIS
 // ==========================
-const compras = [
-  {
-    nome: "João",
-    whatsapp: "41999999999",
-    numeros: [1,2,3],
-    quantidade: 3,
-    total: 15,
-    status: "pago",
-    data: "2026-04-25",
-    hora: "10:30"
-  },
-  {
-    nome: "Maria",
-    whatsapp: "41988888888",
-    numeros: [4,5],
-    quantidade: 2,
-    total: 10,
-    status: "pendente",
-    data: "2026-04-25",
-    hora: "14:10"
-  },
-  {
-    nome: "João",
-    whatsapp: "41999999999",
-    numeros: [6,7],
-    quantidade: 2,
-    total: 10,
-    status: "pago",
-    data: "2026-04-26",
-    hora: "09:00"
-  }
-];
-
 const tabela = document.getElementById("tabela");
+
+let compras = [];
 
 let total = 0;
 let pendentes = 0;
-let totalPedidos = compras.length;
+let totalPedidos = 0;
 let numerosVendidos = 0;
 
 let todosNumeros = [];
 let numerosOrdenadosCronologico = [];
 
 // ==========================
-// 📊 PROCESSAMENTO
+// 🔥 CARREGAR DO FIREBASE
 // ==========================
-compras.forEach(c => {
-  total += c.total;
+async function carregarCompras() {
+  const querySnapshot = await getDocs(collection(db, "compras"));
 
-  if (c.status === "pendente") pendentes++;
+  compras = [];
 
-  if (c.status === "pago") {
-    numerosVendidos += c.quantidade;
-    todosNumeros.push(...c.numeros);
+  total = 0;
+  pendentes = 0;
+  totalPedidos = 0;
+  numerosVendidos = 0;
+  todosNumeros = [];
+  numerosOrdenadosCronologico = [];
+
+  tabela.innerHTML = "";
+
+  querySnapshot.forEach((docSnap) => {
+    const data = docSnap.data();
+
+    // ✅ Corrige números
+    if (typeof data.numeros === "string") {
+      data.numeros = data.numeros
+        .split(",")
+        .map(n => parseInt(n.trim()))
+        .filter(n => !isNaN(n));
+    }
+
+    if (!Array.isArray(data.numeros)) {
+      data.numeros = [];
+    }
+
+    data.numeros = [...new Set(data.numeros)];
+
+    compras.push(data);
+  });
+
+  totalPedidos = compras.length;
+
+  compras.forEach(c => {
+    total += c.total;
+
+    if (c.status === "pendente") pendentes++;
+
+    if (c.status === "pago") {
+      numerosVendidos += c.quantidade;
+      todosNumeros.push(...c.numeros);
+    }
+
+    tabela.innerHTML += `
+      <tr>
+        <td>${c.nome}</td>
+        <td>${c.whatsapp}</td>
+        <td>${c.numeros.join(", ")}</td>
+        <td>${c.quantidade}</td>
+        <td>R$ ${c.total}</td>
+        <td class="${c.status === "pago" ? "pago" : "pendente"}">
+          ${c.status}
+        </td>
+        <td>${c.data}</td>
+        <td>${c.hora}</td>
+      </tr>
+    `;
+  });
+
+  // ordenar cronológico
+  const comprasOrdenadas = [...compras].sort((a, b) => {
+    return new Date(`${a.data} ${a.hora}`) - new Date(`${b.data} ${b.hora}`);
+  });
+
+  comprasOrdenadas.forEach(c => {
+    if (c.status === "pago") {
+      numerosOrdenadosCronologico.push(...c.numeros);
+    }
+  });
+
+  // 🔒 REMOVE DUPLICADOS GLOBAL
+  todosNumeros = [...new Set(todosNumeros)].sort((a, b) => a - b);
+
+  // 🔥 pega ultimo número do sistema
+  const configRef = doc(db, "config", "rifa");
+  const configSnap = await getDoc(configRef);
+
+  let ultimoNumero = 0;
+
+  if (configSnap.exists()) {
+    ultimoNumero = configSnap.data().ultimoNumero || 0;
   }
 
-  tabela.innerHTML += `
-    <tr>
-      <td>${c.nome}</td>
-      <td>${c.whatsapp}</td>
-      <td>${c.numeros.join(", ")}</td>
-      <td>${c.quantidade}</td>
-      <td>R$ ${c.total}</td>
-      <td class="${c.status === "pago" ? "pago" : "pendente"}">
-        ${c.status}
-      </td>
-      <td>${c.data}</td>
-      <td>${c.hora}</td>
-    </tr>
-  `;
-});
+  // atualizar painel
+  document.getElementById("total").innerText = `R$ ${total}`;
+  document.getElementById("pendentes").innerText = pendentes;
+  document.getElementById("pedidos").innerText = totalPedidos;
+  document.getElementById("numerosVendidos").innerText = numerosVendidos;
 
-// 🔥 ordenar corretamente por data
-const comprasOrdenadas = [...compras].sort((a, b) => {
-  return new Date(`${a.data} ${a.hora}`) - new Date(`${b.data} ${b.hora}`);
-});
-
-comprasOrdenadas.forEach(c => {
-  if (c.status === "pago") {
-    numerosOrdenadosCronologico.push(...c.numeros);
-  }
-});
-
-// organizar números únicos
-todosNumeros = [...new Set(todosNumeros)].sort((a, b) => a - b);
+  console.log("Último número global:", ultimoNumero);
+}
 
 // ==========================
-// 📊 RESUMO
-// ==========================
-document.getElementById("total").innerText = `R$ ${total}`;
-document.getElementById("pendentes").innerText = pendentes;
-document.getElementById("pedidos").innerText = totalPedidos;
-document.getElementById("numerosVendidos").innerText = numerosVendidos;
-
-
-// ==========================
-// 🎲 SORTEIO
+// 🎲 SORTEIO (igual)
 // ==========================
 function sortear() {
   if (todosNumeros.length === 0) {
@@ -131,12 +152,11 @@ function sortear() {
 
   overlay.style.display = "flex";
 
-  // limpar estado anterior
   resultadoFinal.style.display = "none";
   document.getElementById("nomeFinal").innerText = "";
   document.getElementById("telefoneFinal").innerText = "";
 
-  let contagem = 8;
+  let contagem = 5;
   numeroAnimado.innerText = contagem;
 
   const contadorInterval = setInterval(() => {
@@ -150,7 +170,6 @@ function sortear() {
     }
   }, 1000);
 }
-
 
 // ==========================
 // 🎰 ANIMAÇÃO
@@ -175,7 +194,6 @@ function iniciarAnimacaoSorteio() {
   }, 2000);
 }
 
-
 // ==========================
 // 🏆 RESULTADO
 // ==========================
@@ -184,12 +202,13 @@ function mostrarResultado(numeroSorteado) {
   const nomeFinal = document.getElementById("nomeFinal");
   const telefoneFinal = document.getElementById("telefoneFinal");
   const resultadoFinal = document.getElementById("resultadoFinal");
-  const btnVoltar = document.getElementById("btnVoltar");
 
   numeroFinal.innerText = numeroSorteado;
 
   let vencedor = compras.find(c =>
-    c.status === "pago" && c.numeros.includes(numeroSorteado)
+    c.status === "pago" &&
+    Array.isArray(c.numeros) &&
+    c.numeros.includes(numeroSorteado)
   );
 
   if (vencedor) {
@@ -198,37 +217,23 @@ function mostrarResultado(numeroSorteado) {
   }
 
   resultadoFinal.style.display = "block";
-
-  btnVoltar.style.display = "none";
-  setTimeout(() => {
-    btnVoltar.style.display = "inline-block";
-  }, 3000);
 }
-
-function voltarPainel() {
-  document.getElementById("overlay").style.display = "none";
-}
-
 
 // ==========================
-// 🎉 CONFETE MELHORADO
+// 🎉 CONFETE
 // ==========================
 function soltarConfete() {
-  for (let i = 0; i < 80; i++) {
+  for (let i = 0; i < 60; i++) {
     const el = document.createElement("div");
 
-    const size = Math.random() * 8 + 4;
-
     el.style.position = "fixed";
-    el.style.width = size + "px";
-    el.style.height = size + "px";
+    el.style.width = "6px";
+    el.style.height = "6px";
     el.style.borderRadius = "50%";
-    el.style.background =
-      ["#FFC0CB", "#FF2E8B", "#FFD700"][Math.floor(Math.random()*3)];
+    el.style.background = ["#FF2E8B", "#FFC0CB"][Math.floor(Math.random()*2)];
 
     el.style.top = "-10px";
     el.style.left = Math.random() * window.innerWidth + "px";
-    el.style.zIndex = 9999;
 
     document.body.appendChild(el);
 
@@ -245,30 +250,8 @@ function soltarConfete() {
   }
 }
 
-
 // ==========================
-// 👀 ÚLTIMOS 6
-// ==========================
-function abrirUltimos() {
-  const popup = document.getElementById("popupNumeros");
-  const container = document.getElementById("ultimosNumeros");
-
-  const ultimos = numerosOrdenadosCronologico.slice(-6);
-
-  container.innerHTML = ultimos.map(n => `
-    <span class="numero">${n}</span>
-  `).join('');
-
-  popup.style.display = "flex";
-}
-
-function fecharPopup() {
-  document.getElementById("popupNumeros").style.display = "none";
-}
-
-
-// ==========================
-// 📄 PDF MELHORADO
+// 📄 PDF
 // ==========================
 function gerarPDF() {
   const { jsPDF } = window.jspdf;
@@ -276,12 +259,11 @@ function gerarPDF() {
 
   let y = 10;
 
-  doc.setFontSize(14);
   doc.text("Lista Oficial da Rifa", 10, y);
   y += 10;
 
   compras.forEach(c => {
-    if (c.status === "pago") {
+    if (c.status === "pago" && Array.isArray(c.numeros)) {
       c.numeros.forEach(numero => {
 
         doc.text(`Número: ${numero}`, 10, y);
@@ -305,47 +287,100 @@ function gerarPDF() {
 // ==========================
 // 🚪 SAIR
 // ==========================
-
 function sair() {
-  signOut(auth)
-    .then(() => {
-      window.location.href = "login.html";
-    })
-    .catch((error) => {
-      console.error("Erro ao sair:", error);
-    });
+  signOut(auth).then(() => {
+    window.location.href = "login.html";
+  });
 }
 
 // ==========================
 // 👋 SAUDAÇÃO
 // ==========================
-
 function atualizarSaudacao(nome) {
   const hora = new Date().getHours();
-  let saudacao = "";
+  let saudacao = hora < 12 ? "Bom dia" : hora < 18 ? "Boa tarde" : "Boa noite";
 
-  if (hora >= 5 && hora < 12) {
-    saudacao = "Bom dia";
-  } else if (hora >= 12 && hora < 18) {
-    saudacao = "Boa tarde";
-  } else {
-    saudacao = "Boa noite";
-  }
-
-  // 👇 primeira letra maiúscula + resto minúsculo
   const nomeFormatado =
     nome.charAt(0).toUpperCase() + nome.slice(1).toLowerCase();
 
   document.getElementById("boasVindas").innerText =
-    `Olá ${nomeFormatado}, tenha um ${saudacao} 👋`;
+    `Olá ${nomeFormatado}, ${saudacao} 👋`;
 }
 
 // ==========================
-// 🌍 EXPOR FUNÇÕES PARA O HTML
+// 🌍 GLOBAL
 // ==========================
 window.sortear = sortear;
+window.gerarPDF = gerarPDF;
+window.sair = sair;
+
+// ==========================
+// 👀 ÚLTIMOS NÚMEROS
+// ==========================
+function abrirUltimos() {
+
+  const popup =
+    document.getElementById("popupNumeros");
+
+  const lista =
+    document.getElementById("ultimosNumeros");
+
+  lista.innerHTML = "";
+
+  // últimos 20 números pagos
+  const ultimos =
+    numerosOrdenadosCronologico
+      .slice(-20)
+      .reverse();
+
+  if (ultimos.length === 0) {
+
+    lista.innerHTML = `
+      <p>Nenhum número vendido ainda.</p>
+    `;
+
+  } else {
+
+    ultimos.forEach(numero => {
+
+      lista.innerHTML += `
+        <span class="numero">
+          ${numero}
+        </span>
+      `;
+
+    });
+  }
+
+  popup.style.display = "flex";
+}
+
+
+// ==========================
+// ❌ FECHAR POPUP
+// ==========================
+function fecharPopup() {
+
+  document.getElementById(
+    "popupNumeros"
+  ).style.display = "none";
+}
+
+
+// ==========================
+// 🔙 VOLTAR DO SORTEIO
+// ==========================
+function voltarPainel() {
+
+  document.getElementById(
+    "overlay"
+  ).style.display = "none";
+}
+
+
+// ==========================
+// 🌍 GLOBAL
+// ==========================
 window.abrirUltimos = abrirUltimos;
 window.fecharPopup = fecharPopup;
-window.gerarPDF = gerarPDF;
 window.voltarPainel = voltarPainel;
-window.sair = sair;

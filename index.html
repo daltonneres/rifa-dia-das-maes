@@ -15,7 +15,8 @@
   </head>
 
   <body>
-    <header>
+
+<header>
   <h1>💖 Rifa Especial Dia dos Namorados</h1>
 </header>
 
@@ -43,32 +44,36 @@
       📲 O ganhador receberá o vídeo diretamente no WhatsApp informado na compra, para compartilhar esse momento especial 💕
     </div>
 
-    <div class="contador" id="contador">Carregando contagem...</div>
+        <div class="contador" id="contador">
+          Carregando contagem...
+        </div>
 
-    <button class="botao" onclick="iniciarCompra()">
-      Comprar Número
-    </button>
+        <!-- 🔥 SEM onclick -->
+        <button class="botao" id="btnAbrirModal">
+          🎟️ Comprar Número
+        </button>
 
-    <div class="info" style="color:#FF2E8B; font-weight:600; text-align:center;">
-      💘 Não deixe para depois: o amor gosta de atitude!
+        <div class="info destaque">
+          💘 Não deixe para depois: o amor gosta de atitude!
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+
     <footer>
-      🔒 Site 100% SEGURO e protegido <br />
-      Suporte 24h com o desenvolvedor
+      🔒 Site 100% seguro <br />
+      Suporte com o desenvolvedor
       <a href="https://linkneres.vercel.app/" target="_blank">
         <strong>Dalton Neres</strong>
       </a>
     </footer>
 
-    <!-- BOTÃO WHATSAPP -->
+    <!-- WHATSAPP -->
     <a
       class="whatsapp"
       href="https://wa.me/5546999711937?text=Olá,%20preciso%20de%20suporte%20na%20rifa"
       target="_blank"
     >
-      💬 SUPORTE
+      💬 Suporte
     </a>
 
     <!-- MODAL -->
@@ -80,33 +85,29 @@
           type="number"
           id="quantidade"
           placeholder="Quantidade de números"
-          oninput="atualizarResumo()"
+          min="1"
         />
 
-        <input
-          type="text"
-          id="nome"
-          placeholder="Seu nome"
-        />
+        <input type="text" id="nome" placeholder="Seu nome" />
 
         <input
           type="text"
           id="whatsappInput"
-          placeholder="Seu WhatsApp"
+          placeholder="WhatsApp (DDD + número)"
         />
 
         <p id="resumo"></p>
 
-        <button onclick="confirmarCompra()">
-          Confirmar Compra
-        </button>
+        <!-- 🔥 SEM onclick -->
+        <button id="btnComprar">Confirmar Compra</button>
 
-        <button onclick="fecharModal()" class="fechar">
+        <!-- 🔥 SEM onclick -->
+        <button id="btnCancelar" class="fechar">
           Cancelar
         </button>
       </div>
     </div>
 
-    <script src="script.js" defer></script>
+    <script type="module" src="script.js"></script>
   </body>
 </html>
