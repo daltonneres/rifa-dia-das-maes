@@ -1,126 +1,120 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Rifa Dia dos Namorados</title>
 
-    <!-- Fonte -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
-      rel="stylesheet"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <title>Rifa Dia dos Namorados</title>
 
-    <link rel="stylesheet" href="style.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  </head>
+  <!-- Fonte -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
 
-  <body>
+  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
 
-<header>
-  <h1>💖 Rifa Especial Dia dos Namorados</h1>
-</header>
+<body>
 
-<div class="container">
-  <div class="card">
-    <div class="titulo">Surpreenda quem você ama!</div>
+  <header>
+    <h1>💖 Rifa Especial Dia dos Namorados</h1>
+  </header>
 
-    <div class="info">
-      💝 Prêmio: Uma cesta romântica cheia de carinho e amor
-    </div>
+  <div class="container">
+    <div class="card">
+      <div class="titulo">Surpreenda quem você ama!</div>
 
-    <div class="info">💰 Valor por número: R$ 5,00</div>
+      <div class="info">
+        💝 Prêmio: Uma cesta romântica cheia de carinho e amor
+      </div>
 
-    <div class="info">
-      🎟️ Números ilimitados — quanto mais você participa,
-      mais chances tem de transformar amor em presente!
-    </div>
+      <div class="info">
+        💰 Valor por número: <strong>R$ 5,00</strong>
+      </div>
 
-    <div class="info">
-      💞 O sorteio será realizado ao final da contagem regressiva,
-      previsto para o dia <strong>12/06/2026</strong>.
-    </div>
+      <div class="info">
+        ⚡ O pagamento pode ser realizado via PIX.
+        A confirmação é feita automaticamente, utilizando recursos seguros
+        para garantir praticidade e segurança na sua participação.
+      </div>
 
-    <div class="info">
-      🎥 O sorteio será feito com total transparência,
-      com gravação ao vivo — porque o amor merece confiança!
-    </div>
+      <div class="info">
+        🎟️ Números ilimitados — quanto mais você participa,
+        mais chances tem de transformar amor em presente!
+      </div>
 
-    <div class="info">
-      📲 O ganhador receberá o vídeo diretamente no WhatsApp
-      informado na compra, para compartilhar esse momento especial 💕
-    </div>
+      <div class="info">
+        💞 O sorteio será realizado ao final da contagem regressiva,
+        previsto para o dia <strong>12/06/2026</strong>.
+      </div>
 
-    <!-- 📸 POLAROID -->
-    <div class="polaroid">
-      <img src="cesta.jpg" alt="Cesta Romântica" title="Cesta Romântica">
-<span>
-  💘 Imagem ilustrativa da cesta romântica — a cesta oficial pode conter alterações.
-</span>
-</div>
+      <div class="info">
+        🎥 O sorteio será feito com total transparência,
+        com gravação ao vivo — porque o amor merece confiança!
+      </div>
 
-    <div class="contador" id="contador">
-      Carregando contagem...
-    </div>
+      <div class="info">
+        📲 O ganhador receberá o vídeo diretamente no WhatsApp
+        informado na compra, para compartilhar esse momento especial 💕
+      </div>
 
-    <button class="botao" id="btnAbrirModal">
-      🎟️ Comprar Número
-    </button>
+      <!-- 📸 POLAROID -->
+      <div class="polaroid">
+        <img src="cesta.jpg" alt="Cesta Romântica" title="Cesta Romântica">
+        <span>
+          💘 Imagem ilustrativa da cesta romântica — a cesta oficial pode conter alterações.
+        </span>
+      </div>
 
-    <div class="info destaque">
-      💘 Não deixe para depois: o amor gosta de atitude!
-    </div>
-  </div>
-</div>
+      <div class="contador" id="contador">
+        Carregando contagem...
+      </div>
 
-    <footer>
-      🔒 Site 100% seguro <br />
-      Suporte com o desenvolvedor
-      <a href="https://linkneres.vercel.app/" target="_blank">
-        <strong>Dalton Neres</strong>
-      </a>
-    </footer>
+      <button class="botao" id="btnAbrirModal">
+        🎟️ Comprar Número
+      </button>
 
-    <!-- WHATSAPP -->
-    <a
-      class="whatsapp"
-      href="https://wa.me/5546999711937?text=Olá,%20preciso%20de%20suporte%20na%20rifa"
-      target="_blank"
-    >
-      💬 Suporte
-    </a>
-
-    <!-- MODAL -->
-    <div id="modal" class="modal">
-      <div class="modal-content">
-        <h2>Comprar números</h2>
-
-        <input
-          type="number"
-          id="quantidade"
-          placeholder="Quantidade de números"
-          min="1"
-        />
-
-        <input type="text" id="nome" placeholder="Seu nome" />
-
-        <input
-          type="text"
-          id="whatsappInput"
-          placeholder="WhatsApp (DDD + número)"
-        />
-
-        <p id="resumo"></p>
-
-        <!-- 🔥 SEM onclick -->
-        <button id="btnComprar">Confirmar Compra</button>
-
-        <!-- 🔥 SEM onclick -->
-        <button id="btnCancelar" class="fechar">
-          Cancelar
-        </button>
+      <div class="info destaque">
+        💘 Não deixe para depois: o amor gosta de atitude!
       </div>
     </div>
+  </div>
 
-    <script type="module" src="script.js"></script>
-  </body>
+  <footer>
+    🔒 Site 100% seguro <br />
+    Suporte com o desenvolvedor
+    <a href="https://linkneres.vercel.app/" target="_blank">
+      <strong>Dalton Neres</strong>
+    </a>
+  </footer>
+
+  <!-- WHATSAPP -->
+  <a class="whatsapp" href="https://wa.me/5546999711937?text=Olá,%20preciso%20de%20suporte%20na%20rifa" target="_blank">
+    💬 Suporte
+  </a>
+
+  <!-- MODAL -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <h2>Comprar números</h2>
+
+      <input type="number" id="quantidade" placeholder="Quantidade de números" min="1" />
+
+      <input type="text" id="nome" placeholder="Seu nome" />
+
+      <input type="text" id="whatsappInput" placeholder="WhatsApp (DDD + número)" />
+
+      <p id="resumo"></p>
+
+      <!-- 🔥 SEM onclick -->
+      <button id="btnComprar">Confirmar Compra</button>
+
+      <!-- 🔥 SEM onclick -->
+      <button id="btnCancelar" class="fechar">
+        Cancelar
+      </button>
+    </div>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+
 </html>
